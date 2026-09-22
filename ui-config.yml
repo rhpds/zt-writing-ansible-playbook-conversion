@@ -4,14 +4,36 @@ antora:
   name: modules
   dir: www
   modules:
-    - name: module-01
-      label: "Writing your lab"
+    - name: 01-playbook-inventory
+      label: "1.0 - The basics & creating an inventory"
       solveButton: true
-    - name: module-02
-      label: "Antora"
+    - name: 02-playbook-directory-structure
+      label: "1.1 - Creating your first Playbook"
       solveButton: true
-    - name: module-03
-      label: "Tabs"
+    - name: 03-playbook-run-it
+      label: "1.2 - Run the playbook!"
+      solveButton: true
+    - name: 04-playbook-multi-node
+      label: "1.3 - From one to many"
+      solveButton: true
+    - name: 05-playbook-variables
+      label: "1.4 - Variables"
+      solveButton: true
+    - name: 06-playbook-conditionals
+      label: "1.5 - Conditionals"
+      solveButton: true
+    - name: 07-handlers
+      label: "1.6 Handlers"
+      solveButton: true
+    - name: 08-playbook-loops
+      label: "1.7 - Loops in Ansible"
+      solveButton: true
+    - name: 09-playbook-templates
+      label: "1.8 - Templates"
+      solveButton: true
+    - name: 10-roles
+      label: "1.9 - Roles"
+      solveButton: true
 
 tabs:
   - name: ">_ terminal"
