@@ -13,13 +13,11 @@ virtualmachines:
       - default
       - secondary
     userdata: |-
-      #cloud-config
-      user: rhel
-      password: ansible123!
-      chpasswd: { expire: False }
-      runcmd:
-        - sed -i "s/PasswordAuthentication no/PasswordAuthentication yes/" /etc/ssh/sshd_config
-        - systemctl reload sshd
+        #cloud-config
+        user: rhel
+        password: ansible123!
+        chpasswd: { expire: False }
+        ssh_pwauth: true
   - name: "node1"
     image: "rhel-9.5"
     memory: "8G"
@@ -32,13 +30,11 @@ virtualmachines:
       - default
       - secondary
     userdata: |-
-      #cloud-config
-      user: rhel
-      password: ansible123!
-      chpasswd: { expire: False }
-      runcmd:
-        - sed -i "s/PasswordAuthentication no/PasswordAuthentication yes/" /etc/ssh/sshd_config
-        - systemctl reload sshd
+        #cloud-config
+        user: rhel
+        password: ansible123!
+        chpasswd: { expire: False }
+        ssh_pwauth: true
   - name: "node2"
     image: "rhel-9.5"
     memory: "8G"
@@ -51,13 +47,11 @@ virtualmachines:
       - default
       - secondary
     userdata: |-
-      #cloud-config
-      user: rhel
-      password: ansible123!
-      chpasswd: { expire: False }
-      runcmd:
-        - sed -i "s/PasswordAuthentication no/PasswordAuthentication yes/" /etc/ssh/sshd_config
-        - systemctl reload sshd
+        #cloud-config
+        user: rhel
+        password: ansible123!
+        chpasswd: { expire: False }
+        ssh_pwauth: true
   - name: "node3"
     image: "rhel-9.5"
     memory: "8G"
@@ -70,10 +64,8 @@ virtualmachines:
       - default
       - secondary
     userdata: |-
-      #cloud-config
-      user: rhel
-      password: ansible123!
-      chpasswd: { expire: False }
-      runcmd:
-        - sed -i "s/PasswordAuthentication no/PasswordAuthentication yes/" /etc/ssh/sshd_config
-        - systemctl reload sshd
+        #cloud-config
+        user: rhel
+        password: ansible123!
+        chpasswd: { expire: False }
+        ssh_pwauth: true
