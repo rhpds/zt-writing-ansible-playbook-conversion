@@ -9,6 +9,45 @@ virtualmachines:
     tags:
       - key: "AnsibleGroup"
         value: "bastions"
+      - key: "AnsibleGroup"
+        value: "controller"
+    networks:
+      - default
+      - secondary
+  - name: "node1"
+    image: "rhel-9.5"
+    memory: "2G"
+    cores: 1
+    image_size: "40G"
+    tags:
+      - key: "AnsibleGroup"
+        value: "nodes"
+      - key: "AnsibleGroup"
+        value: "web"
+    networks:
+      - default
+      - secondary
+  - name: "node2"
+    image: "rhel-9.5"
+    memory: "2G"
+    cores: 1
+    image_size: "40G"
+    tags:
+      - key: "AnsibleGroup"
+        value: "nodes"
+      - key: "AnsibleGroup"
+        value: "web"
+    networks:
+      - default
+      - secondary
+  - name: "node3"
+    image: "rhel-9.5"
+    memory: "2G"
+    cores: 1
+    image_size: "40G"
+    tags:
+      - key: "AnsibleGroup"
+        value: "nodes"
     networks:
       - default
       - secondary
