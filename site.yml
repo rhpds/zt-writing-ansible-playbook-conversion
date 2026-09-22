@@ -1,8 +1,8 @@
 ---
 site:
-  title: "Change me, your title lives as site.title in site.yml"
-  url: https://github.com/rhpds/showroom_template_zero
-  start_page: modules::module-01.adoc
+  title: "Writing your first playbook"
+  url: https://github.com/redhat-gpte-devopsautomation/zt-writing-your-first-playbook
+  start_page: modules::01-playbook-inventory.adoc
 
 asciidoc:
   attributes:
