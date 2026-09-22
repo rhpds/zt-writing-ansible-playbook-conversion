@@ -41,3 +41,6 @@ tabs:
   - name: "Asciidoc Doc"
     url: https://docs.asciidoctor.org/asciidoc/latest/syntax-quick-reference/
     external: true
+  - name: VS Code
+    url: https://vscode-${guid}.${domain}
+    external: true
