@@ -2,7 +2,12 @@
 # Module 01: verify that the learner created an inventory file.
 set -eu
 
-. /tmp/runtime-scripts/runtime-helper.sh
+LAB_USER="${LAB_USER:-rhel}"
+LAB_WORKSPACE="/home/${LAB_USER}/ansible-files"
 
-require_file "${LAB_WORKSPACE}/inventory"
+[ -f "${LAB_WORKSPACE}/inventory" ] || {
+  echo "ERROR: ${LAB_WORKSPACE}/inventory does not exist." >&2
+  exit 1
+}
+
 echo "Module 01 validation passed: inventory exists."

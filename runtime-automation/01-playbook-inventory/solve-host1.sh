@@ -2,7 +2,8 @@
 # Module 01: create the initial inventory.
 set -eu
 
-. /tmp/runtime-scripts/runtime-helper.sh
+LAB_USER="${LAB_USER:-rhel}"
+LAB_WORKSPACE="/home/${LAB_USER}/ansible-files"
 
 install -d -o "${LAB_USER}" -g "${LAB_USER}" -m 0755 "${LAB_WORKSPACE}"
 printf '%s\n' \
