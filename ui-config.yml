@@ -37,8 +37,8 @@ antora:
 
 tabs:
   - name: VSCode Editor
-    port: 8080
-    path: /?folder=/home/rhel/ansible-files/
+    url: https://vscode-${guid}.${domain}/?folder=/home/rhel/ansible-files/
+    external: true
   - name: "Control"
     port: 443
     path: /tty1

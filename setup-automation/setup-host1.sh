@@ -81,7 +81,7 @@ fi
 echo "Configuring code-server for ${LAB_USER}"
 install -d -o "${LAB_USER}" -g "${LAB_USER}" -m 0700 "${LAB_HOME}/.config/code-server"
 printf '%s\n' \
-  'bind-addr: 0.0.0.0:8443' \
+  'bind-addr: 0.0.0.0:8080' \
   'auth: password' \
   "password: ${CODE_SERVER_PASSWORD}" \
   'cert: false' \
@@ -95,5 +95,5 @@ systemctl enable --now "code-server@${LAB_USER}"
 systemctl restart "code-server@${LAB_USER}"
 systemctl --no-pager --full status "code-server@${LAB_USER}"
 
-echo "code-server is listening on host1 TCP/8443 with ${WORKSPACE} ready to open."
+echo "code-server is listening on host1 TCP/8080 with ${WORKSPACE} ready to open."
 echo "A CNV route or proxy is still required before the Showroom browser tab can reach it."
