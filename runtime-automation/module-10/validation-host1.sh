@@ -1,25 +1,29 @@
 #!/bin/sh
-# Module 10: Roles - Validation
-# Validates that apache role exists and web pages are accessible
+# Module 10: verify the Apache role and its rendered page.
+set -eu
 
-USER="rhel"
+. /tmp/runtime-scripts/runtime-helper.sh
 
-# Check if apache role directory exists
-if [ ! -d /home/${USER}/ansible-files/roles/apache ]; then
-    echo "FAIL: Apache role does not exist"
-    exit 1
-fi
-
-# Check if web page is accessible on node1
-if ! curl -s http://node1 | grep -q "Welcome to node"; then
-    echo "FAIL: Web page is not accessible on node1 or does not contain expected content"
-    exit 1
-fi
-
-# Check if web page is accessible on node2
-if ! curl -s http://node2 | grep -q "Welcome to node"; then
-    echo "FAIL: Web page is not accessible on node2 or does not contain expected content"
-    exit 1
-fi
-
-echo "Module 10 validation passed: Apache role exists and web pages are accessible"
+require_directory "${LAB_WORKSPACE}/roles/apache"
+VALIDATION_PLAYBOOK="$(mktemp /tmp/module-10-validation.XXXXXX.yml)"
+trap 'rm -f "${VALIDATION_PLAYBOOK}"' EXIT HUP INT TERM
+cat > "${VALIDATION_PLAYBOOK}" <<'EOF'
+---
+- name: Validate module 10
+  hosts: web
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Retrieve the deployed Apache page
+      ansible.builtin.uri:
+        url: "http://{{ inventory_hostname }}"
+        return_content: true
+        status_code: 200
+      register: page
+    - name: Require the expected rendered page content
+      ansible.builtin.assert:
+        that: "'Welcome to node' in page.content"
+        fail_msg: "{{ inventory_hostname }} does not serve the expected Apache page"
+EOF
+run_navigator "${VALIDATION_PLAYBOOK}"
+echo "Module 10 validation passed: the Apache role and web pages are available."

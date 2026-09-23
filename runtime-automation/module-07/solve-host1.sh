@@ -1,8 +1,10 @@
 #!/bin/sh
 # Module 07: Handlers - Solve
 # Creates playbook with handlers for firewall reload
+set -eu
 
-USER="rhel"
+. /tmp/runtime-scripts/runtime-helper.sh
+USER="${LAB_USER}"
 
 # Create the system_setup.yml playbook with handlers
 cat > /home/${USER}/ansible-files/system_setup.yml <<'EOF'
@@ -75,3 +77,4 @@ chown ${USER}:${USER} /home/${USER}/ansible-files/system_setup.yml
 chmod 0644 /home/${USER}/ansible-files/system_setup.yml
 
 echo "Created system_setup.yml playbook with handlers"
+run_navigator "${LAB_WORKSPACE}/system_setup.yml"

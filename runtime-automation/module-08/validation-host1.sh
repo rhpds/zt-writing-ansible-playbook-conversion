@@ -1,31 +1,26 @@
 #!/bin/sh
-# Module 08: Playbook Loops - Validation
-# Validates that loop_users.yml exists and users are created
+# Module 08: verify the loop playbook and its users.
+set -eu
 
-USER="rhel"
+. /tmp/runtime-scripts/runtime-helper.sh
 
-# Check if loop_users.yml file exists
-if [ ! -f /home/${USER}/ansible-files/loop_users.yml ]; then
-    echo "FAIL: loop_users.yml file does not exist"
-    exit 1
-fi
-
-# Check if alice user exists on node1
-if ! ssh -o StrictHostKeyChecking=no rhel@node1 "id alice" > /dev/null 2>&1; then
-    echo "FAIL: User alice does not exist on node1"
-    exit 1
-fi
-
-# Check if bob user exists on node1
-if ! ssh -o StrictHostKeyChecking=no rhel@node1 "id bob" > /dev/null 2>&1; then
-    echo "FAIL: User bob does not exist on node1"
-    exit 1
-fi
-
-# Check if carol user exists on node1
-if ! ssh -o StrictHostKeyChecking=no rhel@node1 "id carol" > /dev/null 2>&1; then
-    echo "FAIL: User carol does not exist on node1"
-    exit 1
-fi
-
-echo "Module 08 validation passed: loop_users.yml exists and all users created"
+require_file "${LAB_WORKSPACE}/loop_users.yml"
+VALIDATION_PLAYBOOK="$(mktemp /tmp/module-08-validation.XXXXXX.yml)"
+trap 'rm -f "${VALIDATION_PLAYBOOK}"' EXIT HUP INT TERM
+cat > "${VALIDATION_PLAYBOOK}" <<'EOF'
+---
+- name: Validate module 08
+  hosts: node1
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Check that loop users exist
+      ansible.builtin.command: "id {{ item }}"
+      changed_when: false
+      loop:
+        - alice
+        - bob
+        - carol
+EOF
+run_navigator "${VALIDATION_PLAYBOOK}"
+echo "Module 08 validation passed: loop_users.yml and all users exist."

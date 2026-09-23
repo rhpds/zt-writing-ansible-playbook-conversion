@@ -1,8 +1,10 @@
 #!/bin/sh
 # Module 08: Playbook Loops - Solve
 # Creates playbook with loops for multiple users
+set -eu
 
-USER="rhel"
+. /tmp/runtime-scripts/runtime-helper.sh
+USER="${LAB_USER}"
 
 # Create the loop_users.yml playbook with loops
 cat > /home/${USER}/ansible-files/loop_users.yml <<'EOF'
@@ -28,3 +30,4 @@ chown ${USER}:${USER} /home/${USER}/ansible-files/loop_users.yml
 chmod 0644 /home/${USER}/ansible-files/loop_users.yml
 
 echo "Created loop_users.yml playbook with loops"
+run_navigator "${LAB_WORKSPACE}/loop_users.yml"

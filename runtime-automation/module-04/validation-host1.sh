@@ -1,21 +1,21 @@
 #!/bin/sh
-# Module 04: Playbook Multi Node - Validation
-# Validates that myuser exists on web nodes
+# Module 04: verify that myuser exists on each web node.
+set -eu
 
-# Check if myuser exists on node1
-if ssh -o StrictHostKeyChecking=no rhel@node1 "id myuser" > /dev/null 2>&1; then
-    echo "SUCCESS: myuser exists on node1"
-else
-    echo "FAIL: myuser does not exist on node1"
-    exit 1
-fi
+. /tmp/runtime-scripts/runtime-helper.sh
 
-# Check if myuser exists on node2
-if ssh -o StrictHostKeyChecking=no rhel@node2 "id myuser" > /dev/null 2>&1; then
-    echo "SUCCESS: myuser exists on node2"
-else
-    echo "FAIL: myuser does not exist on node2"
-    exit 1
-fi
-
-echo "Module 04 validation passed: myuser exists on all web nodes"
+VALIDATION_PLAYBOOK="$(mktemp /tmp/module-04-validation.XXXXXX.yml)"
+trap 'rm -f "${VALIDATION_PLAYBOOK}"' EXIT HUP INT TERM
+cat > "${VALIDATION_PLAYBOOK}" <<'EOF'
+---
+- name: Validate module 04
+  hosts: web
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Check that myuser exists
+      ansible.builtin.command: id myuser
+      changed_when: false
+EOF
+run_navigator "${VALIDATION_PLAYBOOK}"
+echo "Module 04 validation passed: myuser exists on the web nodes."

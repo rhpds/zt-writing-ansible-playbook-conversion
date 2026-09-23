@@ -1,21 +1,21 @@
 #!/bin/sh
-# Module 05: Playbook Variables - Validation
-# Validates that the padawan user exists on web nodes
+# Module 05: verify that padawan exists on each web node.
+set -eu
 
-# Check if padawan user exists on node1
-if ssh -o StrictHostKeyChecking=no rhel@node1 "id padawan" > /dev/null 2>&1; then
-    echo "SUCCESS: padawan user exists on node1"
-else
-    echo "FAIL: padawan user does not exist on node1"
-    exit 1
-fi
+. /tmp/runtime-scripts/runtime-helper.sh
 
-# Check if padawan user exists on node2
-if ssh -o StrictHostKeyChecking=no rhel@node2 "id padawan" > /dev/null 2>&1; then
-    echo "SUCCESS: padawan user exists on node2"
-else
-    echo "FAIL: padawan user does not exist on node2"
-    exit 1
-fi
-
-echo "Module 05 validation passed: padawan user exists on all web nodes"
+VALIDATION_PLAYBOOK="$(mktemp /tmp/module-05-validation.XXXXXX.yml)"
+trap 'rm -f "${VALIDATION_PLAYBOOK}"' EXIT HUP INT TERM
+cat > "${VALIDATION_PLAYBOOK}" <<'EOF'
+---
+- name: Validate module 05
+  hosts: web
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Check that padawan exists
+      ansible.builtin.command: id padawan
+      changed_when: false
+EOF
+run_navigator "${VALIDATION_PLAYBOOK}"
+echo "Module 05 validation passed: padawan exists on the web nodes."

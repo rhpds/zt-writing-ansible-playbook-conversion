@@ -1,8 +1,10 @@
 #!/bin/sh
 # Module 09: Playbook Templates - Solve
 # Creates Jinja2 template and playbook using templates
+set -eu
 
-USER="rhel"
+. /tmp/runtime-scripts/runtime-helper.sh
+USER="${LAB_USER}"
 
 # Create templates directory
 mkdir -p /home/${USER}/ansible-files/templates
@@ -94,3 +96,4 @@ chmod 0644 /home/${USER}/ansible-files/templates/motd.j2
 chmod 0644 /home/${USER}/ansible-files/system_setup.yml
 
 echo "Created motd.j2 template and system_setup.yml playbook"
+run_navigator "${LAB_WORKSPACE}/system_setup.yml"

@@ -1,8 +1,10 @@
 #!/bin/sh
 # Module 10: Roles - Solve
 # Creates Apache role structure and deploys it
+set -eu
 
-USER="rhel"
+. /tmp/runtime-scripts/runtime-helper.sh
+USER="${LAB_USER}"
 
 # Remove and recreate roles directory
 rm -rf /home/${USER}/ansible-files/roles
@@ -71,7 +73,14 @@ EOF
 
 # Create role template
 cat > /home/${USER}/ansible-files/roles/apache/templates/index.html.j2 <<'EOF'
-Welcome to {{ ansible_hostname }}
+<html>
+<head>
+<title>Welcome to {{ ansible_hostname }}</title>
+</head>
+<body>
+<h1>Hello from {{ ansible_hostname }}</h1>
+</body>
+</html>
 EOF
 
 # Create deploy_apache.yml playbook
@@ -90,3 +99,4 @@ chown ${USER}:${USER} /home/${USER}/ansible-files/deploy_apache.yml
 chmod 0644 /home/${USER}/ansible-files/deploy_apache.yml
 
 echo "Created Apache role and deploy_apache.yml playbook"
+run_navigator "${LAB_WORKSPACE}/deploy_apache.yml"

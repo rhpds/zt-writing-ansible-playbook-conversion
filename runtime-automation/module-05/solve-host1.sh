@@ -1,8 +1,10 @@
 #!/bin/sh
 # Module 05: Playbook Variables - Solve
 # Creates a playbook that uses variables
+set -eu
 
-USER="rhel"
+. /tmp/runtime-scripts/runtime-helper.sh
+USER="${LAB_USER}"
 
 # Create the system_setup.yml playbook file with variables
 cat > /home/${USER}/ansible-files/system_setup.yml <<'EOF'
@@ -31,3 +33,4 @@ chown ${USER}:${USER} /home/${USER}/ansible-files/system_setup.yml
 chmod 0644 /home/${USER}/ansible-files/system_setup.yml
 
 echo "Created system_setup.yml playbook with variables"
+run_navigator "${LAB_WORKSPACE}/system_setup.yml"

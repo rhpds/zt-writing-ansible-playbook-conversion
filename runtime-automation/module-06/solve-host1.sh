@@ -1,8 +1,10 @@
 #!/bin/sh
 # Module 06: Playbook Conditionals - Solve
 # Creates playbook with conditionals and updates inventory
+set -eu
 
-USER="rhel"
+. /tmp/runtime-scripts/runtime-helper.sh
+USER="${LAB_USER}"
 
 # Update inventory to add database group
 cat > /home/${USER}/ansible-files/inventory <<'EOF'
@@ -52,3 +54,4 @@ chmod 0644 /home/${USER}/ansible-files/inventory
 chmod 0644 /home/${USER}/ansible-files/system_setup.yml
 
 echo "Created system_setup.yml playbook with conditionals and updated inventory"
+run_navigator "${LAB_WORKSPACE}/system_setup.yml"
