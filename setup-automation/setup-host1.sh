@@ -90,10 +90,11 @@ chown "${LAB_USER}:${LAB_USER}" "${LAB_HOME}/.config/code-server/config.yaml"
 chmod 0600 "${LAB_HOME}/.config/code-server/config.yaml"
 
 # Keep the user service alive after the provisioning connection closes.
-loginctl enable-linger "${LAB_USER}"
-systemctl enable --now "code-server@${LAB_USER}"
-systemctl restart "code-server@${LAB_USER}"
-systemctl --no-pager --full status "code-server@${LAB_USER}"
+loginctl enable-linger 
+systemctl enable --now code-server
+systemctl restart code-server
+systemctl --no-pager --full status code-server
 
 echo "code-server is listening on host1 TCP/8080 with ${WORKSPACE} ready to open."
 echo "A CNV route or proxy is still required before the Showroom browser tab can reach it."
+
