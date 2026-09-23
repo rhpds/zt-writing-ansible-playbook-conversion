@@ -47,8 +47,8 @@ config/
 [source,shell]
 ----
 runtime-automation/
-├── module_1                            # The directory name should be the same as 
-│                                       # the module content page name
+├── 01-playbook-inventory                # Must exactly match antora.modules[].name
+│                                       # in ui-config.yml
 │   ├── setup.sh                        # Setup playbook which run at start of module 
 │                                       # and when clicked on next button
 │   ├── solve.sh                        # Solve playbook, run when clicked on solve button
@@ -101,4 +101,3 @@ tabs:
 . Push your work to your repo
 .. You should use `git tags` or `git branches` in production
 .. However development items default to the head of `main`
-
