@@ -6,33 +6,43 @@ antora:
   modules:
     - name: 01-playbook-inventory
       label: Playbook Inventory
+      scripts: [setup, solve, validation]
       solveButton: true
     - name: 02-playbook-directory-structure
       label: Playbook Directory Structure
+      scripts: [setup, solve, validation]
       solveButton: true
     - name: 03-playbook-run-it
       label: Playbook Run it
+      scripts: [setup, solve, validation]
       solveButton: true
     - name: 04-playbook-multi-node
       label: Playbook Multi Node
+      scripts: [setup, solve, validation]
       solveButton: true
     - name: 05-playbook-variables
       label: Playbook Variables
+      scripts: [setup, solve, validation]
       solveButton: true
     - name: 06-playbook-conditionals
       label: Playbook Conditionals
+      scripts: [setup, solve, validation]
       solveButton: true
     - name: 07-handlers
       label: Handlers
+      scripts: [setup, solve, validation]
       solveButton: true
     - name: 08-playbook-loops
       label: Playbook Loops
+      scripts: [setup, solve, validation]
       solveButton: true
     - name: 09-playbook-templates
       label: Playbook Templates
+      scripts: [setup, solve, validation]
       solveButton: true
     - name: 10-roles
       label: Roles
+      scripts: [setup, solve, validation]
       solveButton: true
 
 tabs:
