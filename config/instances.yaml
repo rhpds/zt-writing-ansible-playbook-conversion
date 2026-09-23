@@ -1,7 +1,7 @@
 ---
 containers: []
 virtualmachines:
-- name: host1
+  - name: host1
     image: devtools-ansible
     memory: 8G
     cores: 2
