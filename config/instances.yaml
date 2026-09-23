@@ -34,7 +34,6 @@ virtualmachines:
         password: ansible123!
         chpasswd: { expire: False }
         ssh_pwauth: true
-  
   - name: "node1"
     image: "rhel-9.5"
     memory: "8G"
