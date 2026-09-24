@@ -89,6 +89,21 @@ printf '%s\n' \
 chown "${LAB_USER}:${LAB_USER}" "${LAB_HOME}/.config/code-server/config.yaml"
 chmod 0600 "${LAB_HOME}/.config/code-server/config.yaml"
 
+# Keep Ansible extension settings outside the learner workspace. In particular,
+# disabling validation prevents ansible-lint from creating .ansible directories
+# next to the lesson files.
+VSCODE_USER_DIR="${LAB_HOME}/.local/share/code-server/User"
+install -d -o "${LAB_USER}" -g "${LAB_USER}" -m 0700 "${VSCODE_USER_DIR}"
+printf '%s\n' \
+  '{' \
+  '  "ansible.python.interpreterPath": "/usr/bin/python3",' \
+  '  "ansible.validation.enabled": false,' \
+  '  "ansible.validation.lint.enabled": false' \
+  '}' \
+  > "${VSCODE_USER_DIR}/settings.json"
+chown "${LAB_USER}:${LAB_USER}" "${VSCODE_USER_DIR}/settings.json"
+chmod 0600 "${VSCODE_USER_DIR}/settings.json"
+
 # Keep the user service alive after the provisioning connection closes.
 loginctl enable-linger 
 systemctl enable --now code-server
@@ -97,4 +112,3 @@ systemctl --no-pager --full status code-server
 
 echo "code-server is listening on host1 TCP/8080 with ${WORKSPACE} ready to open."
 echo "A CNV route or proxy is still required before the Showroom browser tab can reach it."
-
