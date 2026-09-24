@@ -1,2 +1,8 @@
-#!/bin/sh
-echo "Validated module called module-03" >> /tmp/progress.log
+#!/bin/bash
+set -euo pipefail
+
+. /tmp/runtime-scripts/runtime-helper.sh
+
+run_ssh node1 id myuser
+
+echo "Module 03 validation passed."

@@ -40,3 +40,18 @@ run_navigator() {
       exit 127
     ' sh "${LAB_WORKSPACE}" "${playbook}"
 }
+
+write_workspace_file() {
+  destination="$1"
+  parent_dir=$(dirname "${destination}")
+
+  if [ "${parent_dir}" != "." ]; then
+    runuser -u "${LAB_USER}" -- mkdir -p "${LAB_WORKSPACE}/${parent_dir}"
+  fi
+
+  runuser -u "${LAB_USER}" -- tee "${LAB_WORKSPACE}/${destination}" >/dev/null
+}
+
+run_ssh() {
+  runuser -u "${LAB_USER}" -- ssh -o StrictHostKeyChecking=no "$@"
+}

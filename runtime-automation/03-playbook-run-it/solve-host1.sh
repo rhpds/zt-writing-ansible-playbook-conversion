@@ -1,2 +1,8 @@
-#!/bin/sh
-echo "Solved module called module-03" >> /tmp/progress.log
+#!/bin/bash
+set -euo pipefail
+
+. /tmp/runtime-scripts/runtime-helper.sh
+
+run_navigator system_setup.yml
+
+echo "Ran system_setup.yml."
