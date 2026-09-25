@@ -73,6 +73,23 @@ configure_ssh_key_authentication() {
   done
 }
 
+prepull_execution_environment() {
+  echo "Checking the Ansible execution environment image for ${LAB_USER}"
+
+  if runuser -u "${LAB_USER}" -- env \
+    HOME="${LAB_HOME}" \
+    XDG_RUNTIME_DIR="/run/user/$(id -u "${LAB_USER}")" \
+    podman image exists "${ANSIBLE_NAVIGATOR_EE_IMAGE}"; then
+    echo "Ansible execution environment image is already available."
+  else
+    echo "Pulling the Ansible execution environment image"
+    runuser -u "${LAB_USER}" -- env \
+      HOME="${LAB_HOME}" \
+      XDG_RUNTIME_DIR="/run/user/$(id -u "${LAB_USER}")" \
+      podman pull "${ANSIBLE_NAVIGATOR_EE_IMAGE}"
+  fi
+}
+
 echo "Creating the Ansible learner workspace"
 install -d -o "${LAB_USER}" -g "${LAB_USER}" -m 0755 "${WORKSPACE}" "${LOG_DIR}"
 # A rerun may find lesson files created by an earlier root-owned automation
@@ -145,6 +162,11 @@ chmod 0644 \
   "${LAB_HOME}/.ansible-navigator.yml" \
   "${WORKSPACE}/ansible-navigator.yml"
 
+# The image must be pulled as rhel because rootless Podman image storage is
+# per user. This prevents the learner's first Navigator run from downloading it.
+loginctl enable-linger "${LAB_USER}"
+prepull_execution_environment
+
 if ! command -v code-server >/dev/null 2>&1; then
   case "$(uname -m)" in
     x86_64)
@@ -193,7 +215,6 @@ chown "${LAB_USER}:${LAB_USER}" "${VSCODE_USER_DIR}/settings.json"
 chmod 0600 "${VSCODE_USER_DIR}/settings.json"
 
 # Keep the user service alive after the provisioning connection closes.
-loginctl enable-linger 
 systemctl enable --now code-server
 systemctl restart code-server
 systemctl --no-pager --full status code-server
