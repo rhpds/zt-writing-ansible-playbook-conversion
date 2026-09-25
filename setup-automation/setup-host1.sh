@@ -75,6 +75,9 @@ configure_ssh_key_authentication() {
 
 echo "Creating the Ansible learner workspace"
 install -d -o "${LAB_USER}" -g "${LAB_USER}" -m 0755 "${WORKSPACE}" "${LOG_DIR}"
+# A rerun may find lesson files created by an earlier root-owned automation
+# step. Give the learner ownership before code-server opens the workspace.
+chown -R "${LAB_USER}:${LAB_USER}" "${WORKSPACE}"
 configure_ssh_key_authentication
 
 # The system-level configuration is useful for native Ansible commands. The
