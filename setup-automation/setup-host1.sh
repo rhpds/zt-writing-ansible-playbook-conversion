@@ -102,6 +102,8 @@ printf '%s\n' \
   '  name = Red Hat' \
   > "${LAB_HOME}/.gitconfig"
 
+# ansible-navigator mounts rhel's SSH directory at /root/.ssh in the execution
+# environment, so that is the path Ansible must use inside the container.
 printf '%s\n' \
   '---' \
   'ansible-navigator:' \
@@ -115,7 +117,7 @@ printf '%s\n' \
   '    environment-variables:' \
   '      set:' \
   "        ANSIBLE_REMOTE_USER: ${LAB_USER}" \
-  "        ANSIBLE_PRIVATE_KEY_FILE: ${SSH_PRIVATE_KEY}" \
+  "        ANSIBLE_PRIVATE_KEY_FILE: /root/.ssh/id_rsa" \
   "        ANSIBLE_HOST_KEY_CHECKING: 'False'" \
   "    image: ${ANSIBLE_NAVIGATOR_EE_IMAGE}" \
   '    pull:' \
