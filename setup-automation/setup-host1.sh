@@ -16,6 +16,7 @@ install -d -o "${LAB_USER}" -g "${LAB_USER}" -m 0755 "${WORKSPACE}" "${LOG_DIR}"
 printf '%s\n' \
   '[defaults]' \
   "inventory = ${WORKSPACE}/inventory" \
+  'remote_user = rhel' \
   'host_key_checking = False' \
   > "${LAB_HOME}/.ansible.cfg"
 
