@@ -1,15 +1,17 @@
 #!/bin/bash
 set -euo pipefail
 
-. /tmp/runtime-scripts/runtime-helper.sh
+WORKSPACE=/home/rhel/ansible-files
 
-write_workspace_file templates/motd.j2 <<'EOF'
+runuser -u rhel -- mkdir -p "$WORKSPACE/templates"
+
+runuser -u rhel -- tee "$WORKSPACE/templates/motd.j2" > /dev/null <<'EOF'
 Welcome to {{ ansible_hostname }}.
 OS: {{ ansible_distribution }} {{ ansible_distribution_version }}
 Architecture: {{ ansible_architecture }}
 EOF
 
-write_workspace_file system_setup.yml <<'EOF'
+runuser -u rhel -- tee "$WORKSPACE/system_setup.yml" > /dev/null <<'EOF'
 ---
 - name: Basic System Setup
   hosts: all
@@ -79,6 +81,7 @@ write_workspace_file system_setup.yml <<'EOF'
         state: reloaded
 EOF
 
-run_navigator system_setup.yml
+runuser -u rhel -- env HOME=/home/rhel XDG_RUNTIME_DIR="/run/user/$(id -u rhel)" \
+  bash -c "cd \"$WORKSPACE\" && ansible-navigator run system_setup.yml --mode stdout"
 
 echo "Created the MOTD template and applied it."

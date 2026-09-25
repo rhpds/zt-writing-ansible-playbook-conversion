@@ -1,19 +1,21 @@
 #!/bin/bash
 set -euo pipefail
 
-runuser -u rhel -- mkdir -p \
-  "$LAB_WORKSPACE/roles/apache/tasks" \
-  "$LAB_WORKSPACE/roles/apache/handlers" \
-  "$LAB_WORKSPACE/roles/apache/templates" \
-  "$LAB_WORKSPACE/roles/apache/vars"
+WORKSPACE=/home/rhel/ansible-files
 
-write_workspace_file roles/apache/vars/main.yml <<'EOF'
+runuser -u rhel -- mkdir -p \
+  "$WORKSPACE/roles/apache/tasks" \
+  "$WORKSPACE/roles/apache/handlers" \
+  "$WORKSPACE/roles/apache/templates" \
+  "$WORKSPACE/roles/apache/vars"
+
+runuser -u rhel -- tee "$WORKSPACE/roles/apache/vars/main.yml" > /dev/null <<'EOF'
 ---
 apache_package_name: httpd
 apache_service_name: httpd
 EOF
 
-write_workspace_file roles/apache/tasks/main.yml <<'EOF'
+runuser -u rhel -- tee "$WORKSPACE/roles/apache/tasks/main.yml" > /dev/null <<'EOF'
 ---
 - name: Install Apache web server
   ansible.builtin.package:
@@ -50,7 +52,7 @@ write_workspace_file roles/apache/tasks/main.yml <<'EOF'
     dest: /var/www/html/index.html
 EOF
 
-write_workspace_file roles/apache/handlers/main.yml <<'EOF'
+runuser -u rhel -- tee "$WORKSPACE/roles/apache/handlers/main.yml" > /dev/null <<'EOF'
 ---
 - name: Reload Firewall
   ansible.builtin.service:
@@ -58,7 +60,7 @@ write_workspace_file roles/apache/handlers/main.yml <<'EOF'
     state: reloaded
 EOF
 
-write_workspace_file roles/apache/templates/index.html.j2 <<'EOF'
+runuser -u rhel -- tee "$WORKSPACE/roles/apache/templates/index.html.j2" > /dev/null <<'EOF'
 <html>
 <head>
 <title>Welcome to {{ ansible_hostname }}</title>
@@ -69,7 +71,7 @@ write_workspace_file roles/apache/templates/index.html.j2 <<'EOF'
 </html>
 EOF
 
-write_workspace_file deploy_apache.yml <<'EOF'
+runuser -u rhel -- tee "$WORKSPACE/deploy_apache.yml" > /dev/null <<'EOF'
 ---
 - name: Setup Apache Web Servers
   hosts: web
@@ -78,6 +80,7 @@ write_workspace_file deploy_apache.yml <<'EOF'
     - apache
 EOF
 
-run_navigator deploy_apache.yml
+runuser -u rhel -- env HOME=/home/rhel XDG_RUNTIME_DIR="/run/user/$(id -u rhel)" \
+  bash -c "cd \"$WORKSPACE\" && ansible-navigator run deploy_apache.yml --mode stdout"
 
 echo "Created and applied the apache role."

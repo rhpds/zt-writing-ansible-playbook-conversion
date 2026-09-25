@@ -1,9 +1,9 @@
 #!/bin/bash
 set -euo pipefail
 
-. /tmp/runtime-scripts/runtime-helper.sh
+WORKSPACE=/home/rhel/ansible-files
 
-write_workspace_file system_setup.yml <<'EOF'
+runuser -u rhel -- tee "$WORKSPACE/system_setup.yml" > /dev/null <<'EOF'
 ---
 - name: Basic System Setup
   hosts: all
@@ -68,6 +68,7 @@ write_workspace_file system_setup.yml <<'EOF'
         state: reloaded
 EOF
 
-run_navigator system_setup.yml
+runuser -u rhel -- env HOME=/home/rhel XDG_RUNTIME_DIR="/run/user/$(id -u rhel)" \
+  bash -c "cd \"$WORKSPACE\" && ansible-navigator run system_setup.yml --mode stdout"
 
 echo "Added the firewall handler."
