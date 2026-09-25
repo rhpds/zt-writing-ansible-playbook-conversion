@@ -1,9 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-WORKSPACE=/home/rhel/ansible-files
-
-runuser -u rhel -- tee "$WORKSPACE/loop_users.yml" > /dev/null <<'EOF'
+tee /home/rhel/ansible-files/loop_users.yml > /dev/null <<'EOF'
 ---
 - name: Create multiple users with a loop
   hosts: node1
@@ -20,7 +18,7 @@ runuser -u rhel -- tee "$WORKSPACE/loop_users.yml" > /dev/null <<'EOF'
         - carol
 EOF
 
-runuser -u rhel -- env HOME=/home/rhel XDG_RUNTIME_DIR="/run/user/$(id -u rhel)" \
-  bash -c "cd \"$WORKSPACE\" && ansible-navigator run loop_users.yml --mode stdout"
+cd /home/rhel/ansible-files
+ansible-navigator run loop_users.yml
 
 echo "Created and ran loop_users.yml."

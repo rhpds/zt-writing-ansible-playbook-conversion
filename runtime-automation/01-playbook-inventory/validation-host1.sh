@@ -1,11 +1,9 @@
 #!/bin/bash
 set -euo pipefail
 
-INVENTORY=/home/rhel/ansible-files/inventory
-
-test -f "$INVENTORY"
-grep -qx '\[web\]' "$INVENTORY"
-grep -qx 'node1' "$INVENTORY"
-grep -qx 'node2' "$INVENTORY"
+test -f /home/rhel/ansible-files/inventory
+grep -qx '\[web\]' /home/rhel/ansible-files/inventory
+grep -qx 'node1' /home/rhel/ansible-files/inventory
+grep -qx 'node2' /home/rhel/ansible-files/inventory
 
 echo "Module 01 validation passed."

@@ -1,21 +1,19 @@
 #!/bin/bash
 set -euo pipefail
 
-WORKSPACE=/home/rhel/ansible-files
+mkdir -p \
+  /home/rhel/ansible-files/roles/apache/tasks \
+  /home/rhel/ansible-files/roles/apache/handlers \
+  /home/rhel/ansible-files/roles/apache/templates \
+  /home/rhel/ansible-files/roles/apache/vars
 
-runuser -u rhel -- mkdir -p \
-  "$WORKSPACE/roles/apache/tasks" \
-  "$WORKSPACE/roles/apache/handlers" \
-  "$WORKSPACE/roles/apache/templates" \
-  "$WORKSPACE/roles/apache/vars"
-
-runuser -u rhel -- tee "$WORKSPACE/roles/apache/vars/main.yml" > /dev/null <<'EOF'
+tee /home/rhel/ansible-files/roles/apache/vars/main.yml > /dev/null <<'EOF'
 ---
 apache_package_name: httpd
 apache_service_name: httpd
 EOF
 
-runuser -u rhel -- tee "$WORKSPACE/roles/apache/tasks/main.yml" > /dev/null <<'EOF'
+tee /home/rhel/ansible-files/roles/apache/tasks/main.yml > /dev/null <<'EOF'
 ---
 - name: Install Apache web server
   ansible.builtin.package:
@@ -52,7 +50,7 @@ runuser -u rhel -- tee "$WORKSPACE/roles/apache/tasks/main.yml" > /dev/null <<'E
     dest: /var/www/html/index.html
 EOF
 
-runuser -u rhel -- tee "$WORKSPACE/roles/apache/handlers/main.yml" > /dev/null <<'EOF'
+tee /home/rhel/ansible-files/roles/apache/handlers/main.yml > /dev/null <<'EOF'
 ---
 - name: Reload Firewall
   ansible.builtin.service:
@@ -60,7 +58,7 @@ runuser -u rhel -- tee "$WORKSPACE/roles/apache/handlers/main.yml" > /dev/null <
     state: reloaded
 EOF
 
-runuser -u rhel -- tee "$WORKSPACE/roles/apache/templates/index.html.j2" > /dev/null <<'EOF'
+tee /home/rhel/ansible-files/roles/apache/templates/index.html.j2 > /dev/null <<'EOF'
 <html>
 <head>
 <title>Welcome to {{ ansible_hostname }}</title>
@@ -71,7 +69,7 @@ runuser -u rhel -- tee "$WORKSPACE/roles/apache/templates/index.html.j2" > /dev/
 </html>
 EOF
 
-runuser -u rhel -- tee "$WORKSPACE/deploy_apache.yml" > /dev/null <<'EOF'
+tee /home/rhel/ansible-files/deploy_apache.yml > /dev/null <<'EOF'
 ---
 - name: Setup Apache Web Servers
   hosts: web
@@ -80,7 +78,7 @@ runuser -u rhel -- tee "$WORKSPACE/deploy_apache.yml" > /dev/null <<'EOF'
     - apache
 EOF
 
-runuser -u rhel -- env HOME=/home/rhel XDG_RUNTIME_DIR="/run/user/$(id -u rhel)" \
-  bash -c "cd \"$WORKSPACE\" && ansible-navigator run deploy_apache.yml --mode stdout"
+cd /home/rhel/ansible-files
+ansible-navigator run deploy_apache.yml
 
 echo "Created and applied the apache role."

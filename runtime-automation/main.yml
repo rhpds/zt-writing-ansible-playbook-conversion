@@ -28,6 +28,8 @@
     ansible.builtin.file:
       path: "/tmp/runtime-scripts/{{ module_dir }}"
       state: directory
+      owner: rhel
+      group: rhel
       mode: '0755'
 
   - name: Check if /module_dir/module_stage-host.sh exists
@@ -43,7 +45,7 @@
       dest: "/tmp/runtime-scripts/{{ module_dir }}/{{ module_stage }}-{{ ansible_host }}.sh"
     register: r_result
 
-  - name: Execute module_stage-host.sh if it exists
+  - name: Execute module stage as the learner
     when: r_script_test.stat.exists
     shell: |
       bash -x /tmp/runtime-scripts/{{ module_dir }}/{{ module_stage }}-{{ ansible_host }}.sh > /tmp/runtime-scripts/{{ module_dir }}/{{ module_stage }}-{{ ansible_host }}.log 2>&1
@@ -51,6 +53,10 @@
       cat /tmp/runtime-scripts/{{ module_dir }}/{{ module_stage }}-{{ ansible_host }}.log
       exit "$r_script_rc"
     become: true
+    become_user: rhel
+    environment:
+      HOME: /home/rhel
+      XDG_RUNTIME_DIR: /run/user/1000
     register: r_result
 
   - name: Output script result
