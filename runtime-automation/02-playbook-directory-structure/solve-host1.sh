@@ -1,9 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-. /tmp/runtime-scripts/runtime-helper.sh
-
-write_workspace_file system_setup.yml <<'EOF'
+tee /home/rhel/ansible-files/system_setup.yml << EOF
 ---
 - name: Basic System Setup
   hosts: node1
@@ -20,6 +18,7 @@ write_workspace_file system_setup.yml <<'EOF'
         name: myuser
         state: present
         create_home: true
+
 EOF
 
 echo "Created system_setup.yml."
