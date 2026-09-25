@@ -43,13 +43,6 @@
       dest: "/tmp/runtime-scripts/{{ module_dir }}/{{ module_stage }}-{{ ansible_host }}.sh"
     register: r_result
 
-  - name: Copy runtime helper
-    when: r_script_test.stat.exists
-    ansible.builtin.copy:
-      src: ./runtime-helper.sh
-      dest: /tmp/runtime-scripts/runtime-helper.sh
-      mode: '0644'
-
   - name: Execute module_stage-host.sh if it exists
     when: r_script_test.stat.exists
     shell: |
