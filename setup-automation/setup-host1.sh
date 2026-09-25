@@ -98,7 +98,8 @@ printf '%s\n' \
   '{' \
   '  "ansible.python.interpreterPath": "/usr/bin/python3",' \
   '  "ansible.validation.enabled": false,' \
-  '  "ansible.validation.lint.enabled": false' \
+  '  "ansible.validation.lint.enabled": false,' \
+  '  "security.workspace.trust.enabled": false' \
   '}' \
   > "${VSCODE_USER_DIR}/settings.json"
 chown "${LAB_USER}:${LAB_USER}" "${VSCODE_USER_DIR}/settings.json"
