@@ -1,8 +1,6 @@
 #!/bin/bash
 set -euo pipefail
 
-. /tmp/runtime-scripts/runtime-helper.sh
-
 runuser -u rhel -- mkdir -p \
   "$LAB_WORKSPACE/roles/apache/tasks" \
   "$LAB_WORKSPACE/roles/apache/handlers" \
